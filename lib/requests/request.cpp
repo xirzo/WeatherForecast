@@ -12,7 +12,7 @@ void request() {
     cpr::Header header = {{"X-Api-Key", api_key}};
 
     cpr::Response response =
-        cpr::Get(cpr::Url{"https://api.api-ninjas.com/v1/weather"}, header, params);
+        cpr::Get(cpr::Url{"https://api.api-ninjas.com/v1/weather"}, params, header);
 
     if (response.error) {
         std::cerr << "Request Error: " << response.error.message << std::endl;
