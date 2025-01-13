@@ -4,6 +4,7 @@
 build/
 compile_commands.json
 .cache/
+config.json
 
 # All idea files
 **.idea*/
