@@ -53,59 +53,67 @@ ParseResult JsonParser::Parse(const std::string& json_text) {
 
     std::string content = json_text.substr(start_brace + 1, end_brace - start_brace - 1);
     std::stringstream ss(content);
-    std::string pair_segment;
-    bool in_array = false;
+    std::string segment;
+    bool parsing_array = false;
     std::string current_key;
-    std::string array_values;
+    std::string array_data;
 
-    while (std::getline(ss, pair_segment, ',')) {
-        pair_segment = Trim(pair_segment);
-        if (pair_segment.empty()) {
+    while (std::getline(ss, segment, ',')) {
+        segment = Trim(segment);
+        if (segment.empty()) {
             continue;
         }
-
-        if (in_array) {
-            array_values += "," + pair_segment;
-            if (pair_segment.find(']') != std::string::npos) {
-                in_array = false;
-                json[current_key] = array_values;
+        if (parsing_array) {
+            array_data += "," + segment;
+            if (segment.find(']') != std::string::npos) {
+                parsing_array = false;
+                json[current_key] = array_data;
             }
             continue;
         }
 
-        std::size_t colon_pos = pair_segment.find(':');
+        std::size_t colon_pos = segment.find(':');
+
         if (colon_pos == std::string::npos) {
             continue;
         }
 
-        std::string key_str = pair_segment.substr(0, colon_pos);
-        std::string value_str = pair_segment.substr(colon_pos + 1);
+        std::string key = segment.substr(0, colon_pos);
+        std::string value = segment.substr(colon_pos + 1);
 
-        key_str = Trim(key_str);
-        if (key_str.empty() == false && key_str.front() == '\"') {
-            key_str.erase(0, 1);
-        }
-        if (key_str.empty() == false && key_str.back() == '\"') {
-            key_str.pop_back();
+        key = Trim(key);
+
+        if (key.empty() == false && key.front() == '\"') {
+            key.erase(0, 1);
         }
 
-        value_str = Trim(value_str);
+        if (key.empty() == false && key.back() == '\"') {
+            key.pop_back();
+        }
 
-        if (value_str.empty() == false && value_str.front() == '[') {
-            in_array = true;
-            array_values = value_str;
-            if (value_str.find(']') != std::string::npos) {
-                in_array = false;
-                json[key_str] = array_values;
+        value = Trim(value);
+
+        if (value.empty() == false && value.front() == '[') {
+            parsing_array = true;
+
+            array_data = value;
+
+            current_key = key;
+
+            if (value.find(']') != std::string::npos) {
+                parsing_array = false;
+                json[current_key] = array_data;
             }
         } else {
-            if (value_str.empty() == false && value_str.front() == '\"') {
-                value_str.erase(0, 1);
+            if (value.empty() == false && value.front() == '\"') {
+                value.erase(0, 1);
             }
-            if (value_str.empty() == false && value_str.back() == '\"') {
-                value_str.pop_back();
+
+            if (value.empty() == false && value.back() == '\"') {
+                value.pop_back();
             }
-            json[key_str] = value_str;
+
+            json[key] = value;
         }
     }
 

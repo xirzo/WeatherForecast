@@ -2,21 +2,25 @@
 #include <ostream>
 #include <variant>
 
-#include "parser.h"
+#include "configuration.h"
 
 int main() {
-    JsonParser parser;
+    ConfigurationFactory factory;
 
-    ParseResult result = parser.Parse();
+    CreateResult result = factory.Create();
 
-    if (std::holds_alternative<ParseError>(result)) {
-        std::cerr << std::get<ParseError>(result).message << std::endl;
+    if (std::holds_alternative<CreateError>(result)) {
+        std::cerr << std::get<CreateError>(result).message << std::endl;
     }
 
-    Json config = std::get<Json>(result);
+    Configuration configuration = std::get<Configuration>(result);
 
-    for (auto& it : config) {
-        std::cout << it.first << " " << it.second << std::endl;
+    std::cout << configuration.days << std::endl;
+    std::cout << configuration.frequency << std::endl;
+    std::cout << configuration.api_key << std::endl;
+
+    for (size_t i = 0; i < configuration.cities.size(); ++i) {
+        std::cout << configuration.cities[i] << std::endl;
     }
 
     return 0;
