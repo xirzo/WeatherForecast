@@ -112,14 +112,14 @@ CreateResult ConfigurationFactory::Create() {
                            std::get<ExtractionError>(cities_extraction).message};
     }
 
-    std::vector<std::string> cities_vec =
+    std::vector<std::string> cities =
         std::get<std::vector<std::string>>(cities_extraction);
 
-    for (size_t i = 0; i < cities_vec.size(); ++i) {
+    for (size_t i = 0; i < cities.size(); ++i) {
         HttpClient client("https://api.api-ninjas.com/v1");
 
         cpr::Parameters params;
-        params.Add({{"name"}, cities_vec[i]});
+        params.Add({{"name"}, cities[i]});
 
         cpr::Header header = {{"X-Api-Key", configuration.api_key}};
 
@@ -174,6 +174,7 @@ CreateResult ConfigurationFactory::Create() {
         }
 
         city.longitude = std::get<double>(std::get<JsonValue>(longitude_result).value);
+        city.name = cities[i];
         configuration.cities.push_back(city);
     }
 

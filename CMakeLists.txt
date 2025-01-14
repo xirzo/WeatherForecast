@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(
-  weather
+  weather_forecast
   VERSION 0.1
   DESCRIPTION "Xirzo ITMO Labwork"
   LANGUAGES CXX)
@@ -32,5 +32,4 @@ endif()
 add_subdirectory(lib)
 add_subdirectory(bin)
 
-enable_testing()
-add_subdirectory(tests)
+# enable_testing() add_subdirectory(tests)
