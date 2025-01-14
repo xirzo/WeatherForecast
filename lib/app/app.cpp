@@ -6,12 +6,13 @@
 #include <optional>
 #include <stdexcept>
 
-#include "app.h"
 #include "configuration_factory.h"
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/component_base.hpp"
 #include "ftxui/component/event.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/dom/elements.hpp"
+
+using namespace ftxui;
 
 Application::Application(std::string& config_path) : file_reader_(config_path) {
     ReadFileResult read_result = file_reader_.ReadFile();
@@ -44,61 +45,42 @@ InitResult Application::Init() {
     return std::nullopt;
 }
 
-std::string Code(Event event) {
-    std::string codes;
-
-    for (auto& it : event.input()) {
-        codes += " " + std::to_string((unsigned int)it);
-    }
-
-    return codes;
+// Helper function to convert Button components to Elements
+Element ButtonToElement(Component button) {
+    return button->Render() | size(WIDTH, LESS_THAN, 15);  // Adjust size as needed
 }
 
 RunResult Application::Run() {
     auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<Event> keys;
+    int count = 0;
 
-    auto left_column = Renderer([&] {
-        Elements children = {
-            text("Codes"),
-            separator(),
-        };
-        for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
-            children.push_back(text(Code(keys[i])));
-        }
-        return vbox(children);
+    auto decrease_button = Button("Decrease", [&] { count--; });
+    auto increase_button = Button("Increase", [&] { count++; });
+
+    Elements button_elements = {decrease_button->Render(), separator(),
+                                increase_button->Render()};
+
+    auto buttons = hbox(button_elements) | center;
+
+    auto renderer = Renderer([&] {
+        return vbox({
+                   text("Count: " + std::to_string(count)) | hcenter,
+                   separator(),
+                   buttons,
+               }) |
+               border;
     });
 
-    auto right_column = Renderer([&] {
-        Elements children = {
-            text("Event"),
-            separator(),
-        };
-        for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
-            children.push_back(text(keys[i].DebugString()));
-        }
-        return vbox(children);
-    });
-
-    int split_size = 40;
-
-    auto component = ResizableSplitLeft(left_column, right_column, &split_size);
-    component |= border;
-
-    component |= CatchEvent([&](Event event) {
-        keys.push_back(event);
-
+    renderer |= CatchEvent([&](Event event) -> bool {
         if (event == ExitKey) {
             screen.ExitLoopClosure()();
             return true;
         }
-
         return false;
     });
 
-    screen.Loop(component);
-
+    screen.Loop(renderer);
     return std::nullopt;
 }
 

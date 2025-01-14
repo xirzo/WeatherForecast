@@ -34,6 +34,8 @@ public:
 private:
     FileReader file_reader_;
     const Event ExitKey = Event::Escape;
+    const Event NextKey = Event::N;
+    const Event PreviousKey = Event::P;
     std::unique_ptr<JsonParser> parser_;
     std::unique_ptr<ConfigurationFactory> factory_;
 
