@@ -1,6 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <ftxui/component/event.hpp>
 #include <memory>
 #include <optional>
 
@@ -8,6 +9,8 @@
 #include "configuration_factory.h"
 #include "file_reader.h"
 #include "parser.h"
+
+using namespace ftxui;
 
 struct InitError {
     std::string message;
@@ -30,6 +33,7 @@ public:
 
 private:
     FileReader file_reader_;
+    const Event ExitKey = Event::Escape;
     std::unique_ptr<JsonParser> parser_;
     std::unique_ptr<ConfigurationFactory> factory_;
 

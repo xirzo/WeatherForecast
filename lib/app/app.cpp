@@ -8,8 +8,10 @@
 
 #include "app.h"
 #include "configuration_factory.h"
-
-using namespace ftxui;
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/dom/elements.hpp"
 
 Application::Application(std::string& config_path) : file_reader_(config_path) {
     ReadFileResult read_result = file_reader_.ReadFile();
@@ -42,18 +44,60 @@ InitResult Application::Init() {
     return std::nullopt;
 }
 
+std::string Code(Event event) {
+    std::string codes;
+
+    for (auto& it : event.input()) {
+        codes += " " + std::to_string((unsigned int)it);
+    }
+
+    return codes;
+}
+
 RunResult Application::Run() {
-    Element document = hbox({
-        text("left") | border,
-        text("middle") | border | flex,
-        text("right") | border,
+    auto screen = ScreenInteractive::TerminalOutput();
+
+    std::vector<Event> keys;
+
+    auto left_column = Renderer([&] {
+        Elements children = {
+            text("Codes"),
+            separator(),
+        };
+        for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
+            children.push_back(text(Code(keys[i])));
+        }
+        return vbox(children);
     });
 
-    auto screen = Screen::Create(Dimension::Full(),        // Width
-                                 Dimension::Fit(document)  // Height
-    );
-    Render(screen, document);
-    screen.Print();
+    auto right_column = Renderer([&] {
+        Elements children = {
+            text("Event"),
+            separator(),
+        };
+        for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
+            children.push_back(text(keys[i].DebugString()));
+        }
+        return vbox(children);
+    });
+
+    int split_size = 40;
+
+    auto component = ResizableSplitLeft(left_column, right_column, &split_size);
+    component |= border;
+
+    component |= CatchEvent([&](Event event) {
+        keys.push_back(event);
+
+        if (event == ExitKey) {
+            screen.ExitLoopClosure()();
+            return true;
+        }
+
+        return false;
+    });
+
+    screen.Loop(component);
 
     return std::nullopt;
 }
