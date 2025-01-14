@@ -1,11 +1,15 @@
 #include "app.h"
 
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
 
 #include "app.h"
 #include "configuration_factory.h"
+
+using namespace ftxui;
 
 Application::Application(std::string& config_path) : file_reader_(config_path) {
     ReadFileResult read_result = file_reader_.ReadFile();
@@ -39,6 +43,18 @@ InitResult Application::Init() {
 }
 
 RunResult Application::Run() {
+    Element document = hbox({
+        text("left") | border,
+        text("middle") | border | flex,
+        text("right") | border,
+    });
+
+    auto screen = Screen::Create(Dimension::Full(),        // Width
+                                 Dimension::Fit(document)  // Height
+    );
+    Render(screen, document);
+    screen.Print();
+
     return std::nullopt;
 }
 
