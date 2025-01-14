@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <optional>
 
 #include "app.h"
 
@@ -7,7 +8,11 @@ int main(void) {
     std::string config_path = "../config.json";
     Application app(config_path);
 
-    app.Init();
+    InitResult init_result = app.Init();
+
+    if (init_result != std::nullopt) {
+        std::cerr << init_result->message << std::endl;
+    }
 
     RunResult result = app.Run();
 

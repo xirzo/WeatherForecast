@@ -5,7 +5,6 @@
 #include <memory>
 #include <optional>
 
-#include "configuration.h"
 #include "configuration_factory.h"
 #include "file_reader.h"
 #include "parser.h"
@@ -38,7 +37,5 @@ private:
     const Event PreviousKey = Event::P;
     std::unique_ptr<JsonParser> parser_;
     std::unique_ptr<ConfigurationFactory> factory_;
-
-    void FetchCityCoordinates(const Configuration& config);
 };
 #endif  // APPLICATION_H

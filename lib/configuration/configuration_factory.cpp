@@ -1,8 +1,10 @@
 #include "configuration_factory.h"
 
+#include <iostream>
 #include <string>
 #include <variant>
 
+#include "client.h"
 #include "configuration.h"
 #include "parser.h"
 
@@ -111,6 +113,70 @@ CreateResult ConfigurationFactory::Create() {
     }
 
     configuration.cities = std::get<std::vector<std::string>>(cities_extraction);
+
+    std::vector<std::string> cities_vec =
+        std::get<std::vector<std::string>>(cities_extraction);
+
+    for (size_t i = 0; i < cities_vec.size(); ++i) {
+        HttpClient client("https://api.api-ninjas.com/v1");
+
+        cpr::Parameters params;
+        params.Add({{"name"}, cities_vec[i]});
+
+        cpr::Header header = {{"X-Api-Key", configuration.api_key}};
+
+        auto response = client.Get("/city", params, header);
+
+        if (response.error) {
+            return CreateError{response.error.message};
+        }
+
+        JsonParser current_parser(response.text);
+        ParseResult parse_result = current_parser.Parse();
+
+        if (std::holds_alternative<ParseError>(parse_result)) {
+            return CreateError{std::get<ParseError>(parse_result).message};
+        }
+
+        Json json = std::get<Json>(parse_result);
+
+        Converter converter(json);
+
+        ConvertResult latitude_result = converter.ConvertKey("latitude");
+
+        if (std::holds_alternative<ConvertError>(latitude_result)) {
+            return CreateError{std::get<ConvertError>(latitude_result).message};
+        }
+
+        if (std::holds_alternative<ConvertError>(latitude_result)) {
+            return CreateError{std::get<ConvertError>(latitude_result).message};
+        }
+
+        if (!std::holds_alternative<double>(std::get<JsonValue>(latitude_result).value)) {
+            return CreateError{"Latitude property is not a double"};
+        }
+
+        double latitude = std::get<double>(std::get<JsonValue>(latitude_result).value);
+
+        ConvertResult longitude_result = converter.ConvertKey("longitude");
+
+        if (std::holds_alternative<ConvertError>(longitude_result)) {
+            return CreateError{std::get<ConvertError>(longitude_result).message};
+        }
+
+        if (std::holds_alternative<ConvertError>(longitude_result)) {
+            return CreateError{std::get<ConvertError>(longitude_result).message};
+        }
+
+        if (!std::holds_alternative<double>(
+                std::get<JsonValue>(longitude_result).value)) {
+            return CreateError{"Longitude property is not a double"};
+        }
+
+        double longitude = std::get<double>(std::get<JsonValue>(longitude_result).value);
+
+        std::cout << latitude << " " << longitude << std::endl;
+    }
 
     return configuration;
 }

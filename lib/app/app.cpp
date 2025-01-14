@@ -41,7 +41,6 @@ InitResult Application::Init() {
     std::cout << "Frequency: " << configuration.frequency << std::endl;
     std::cout << "API Key: " << configuration.api_key << std::endl;
 
-    FetchCityCoordinates(configuration);
     return std::nullopt;
 }
 
@@ -82,9 +81,4 @@ RunResult Application::Run() {
 
     screen.Loop(renderer);
     return std::nullopt;
-}
-
-void Application::FetchCityCoordinates(const Configuration& config) {
-    for (const auto& city : config.cities) {
-    }
 }

@@ -2,6 +2,7 @@
 #define HTTPCLIENT_H
 
 #include <cpr/cpr.h>
+#include <cpr/cprtypes.h>
 
 #include <string>
 
@@ -10,7 +11,8 @@ public:
     HttpClient(const std::string& base_url);
 
     cpr::Response Get(const std::string& endpoint,
-                      const cpr::Parameters& params = cpr::Parameters());
+                      const cpr::Parameters& params = cpr::Parameters(),
+                      const cpr::Header header = cpr::Header());
 
 private:
     std::string base_url_;

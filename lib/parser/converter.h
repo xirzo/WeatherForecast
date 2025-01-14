@@ -17,11 +17,11 @@ public:
     explicit Converter(Json json);
 
     ConvertResult ConvertKey(const std::string& key);
-    ConvertResult ConvertValue(const std::string& value);
 
 private:
     Json json_;
 
+    ConvertResult ConvertValue(const std::string& value);
     ConvertResult ConvertToBool(const std::string& raw_value);
     ConvertResult ConvertToInt(const std::string& raw_value);
     ConvertResult ConvertToDouble(const std::string& raw_value);

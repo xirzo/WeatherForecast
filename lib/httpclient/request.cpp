@@ -33,7 +33,6 @@ void get_lat_lon_by_city_name(const std::string& city_name) {
     const char* api_key = "sNzuIBF9w5qPxUQkiPTE+g==2Z9YMhaWVzcqSXf0";
 
     cpr::Parameters params;
-
     params.Add({{"name"}, city_name});
 
     cpr::Header header = {{"X-Api-Key", api_key}};
