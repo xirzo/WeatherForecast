@@ -9,9 +9,9 @@
 void get_weather_by_lat_lon() {
     const char* api_key = "sNzuIBF9w5qPxUQkiPTE+g==2Z9YMhaWVzcqSXf0";
 
-    cpr::Parameters params = {{"latitude", "59.57"}, {"longitude", "30.19"}};
-
-    cpr::Header header = {{"X-Api-Key", api_key}};
+    cpr::Parameters params;
+    params.Add({"latitude", "59.27"});
+    params.Add({"longitude", "30.19"});
 
     cpr::Response response =
         cpr::Get(cpr::Url{"https://api.open-meteo.com/v1/forecast"}, params);

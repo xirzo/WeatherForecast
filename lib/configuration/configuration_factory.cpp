@@ -6,6 +6,9 @@
 #include "configuration.h"
 #include "parser.h"
 
+ConfigurationFactory::ConfigurationFactory(JsonParser& parser)
+    : parser_(std::move(parser)) {}
+
 ExtractResult ConfigurationFactory::ExtractStrings(
     const std::vector<JsonValue>& jsonValues) {
     std::vector<std::string> strings;

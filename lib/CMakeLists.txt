@@ -1,3 +1,4 @@
+add_subdirectory(app)
 add_subdirectory(configuration)
+add_subdirectory(httpclient)
 add_subdirectory(parser)
-add_subdirectory(requests)

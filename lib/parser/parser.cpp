@@ -1,20 +1,11 @@
 #include "parser.h"
 
-#include "file_reader.h"
 #include "sstream"
 
-JsonParser::JsonParser() : file_reader_("../config.json") {}
+JsonParser::JsonParser(std::string text) : text_(std::move(text)) {}
 
 ParseResult JsonParser::Parse() {
-    ReadFileResult file_read_result = file_reader_.ReadFile();
-
-    if (std::holds_alternative<FileError>(file_read_result)) {
-        return ParseError{std::get<FileError>(file_read_result).message};
-    }
-
-    std::string json_text = std::get<std::string>(file_read_result);
-
-    ParseResult parse_result = Parse(json_text);
+    ParseResult parse_result = Parse(text_);
 
     if (std::holds_alternative<ParseError>(parse_result)) {
         return ParseError{std::get<ParseError>(parse_result).message};

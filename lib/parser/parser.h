@@ -1,10 +1,9 @@
 #ifndef PARSER
 #define PARSER
 
+#include <string>
 #include <unordered_map>
 #include <variant>
-
-#include "file_reader.h"
 
 struct ParseError {
     std::string message;
@@ -16,12 +15,11 @@ using ParseResult = std::variant<Json, ParseError>;
 
 class JsonParser {
 public:
-    JsonParser();
+    JsonParser(std::string text);
     ParseResult Parse();
 
 private:
-    FileReader file_reader_;
-
+    std::string text_;
     ParseResult Parse(const std::string& json_text);
     std::string Trim(const std::string& str);
 };

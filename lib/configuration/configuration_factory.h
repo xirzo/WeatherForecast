@@ -22,6 +22,7 @@ using ExtractResult = std::variant<std::vector<std::string>, ExtractionError>;
 
 class ConfigurationFactory {
 public:
+    ConfigurationFactory(JsonParser& parser);
     CreateResult Create();
 
 private:
