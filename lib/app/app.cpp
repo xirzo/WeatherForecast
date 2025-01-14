@@ -1,6 +1,7 @@
 #include "app.h"
 
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 
 #include "app.h"
@@ -20,11 +21,11 @@ Application::Application(std::string& config_path) : file_reader_(config_path) {
     factory_ = std::make_unique<ConfigurationFactory>(*parser_);
 }
 
-RunResult Application::Run() {
+InitResult Application::Init() {
     CreateResult result = factory_->Create();
 
     if (std::holds_alternative<CreateError>(result)) {
-        return RunError{std::get<CreateError>(result).message};
+        return InitError{std::get<CreateError>(result).message};
     }
 
     Configuration configuration = std::get<Configuration>(result);
@@ -34,6 +35,10 @@ RunResult Application::Run() {
     std::cout << "API Key: " << configuration.api_key << std::endl;
 
     FetchCityCoordinates(configuration);
+    return std::nullopt;
+}
+
+RunResult Application::Run() {
     return std::nullopt;
 }
 

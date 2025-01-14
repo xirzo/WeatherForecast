@@ -9,9 +9,15 @@
 #include "file_reader.h"
 #include "parser.h"
 
+struct InitError {
+    std::string message;
+};
+
 struct RunError {
     std::string message;
 };
+
+using InitResult = std::optional<InitError>;
 
 using RunResult = std::optional<RunError>;
 
@@ -19,6 +25,7 @@ class Application {
 public:
     explicit Application(std::string& config_path);
 
+    InitResult Init();
     RunResult Run();
 
 private:

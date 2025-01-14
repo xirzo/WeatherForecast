@@ -1,9 +1,19 @@
+#include <cstdlib>
+#include <optional>
+
 #include "app.h"
 
-int main() {
+int main(void) {
     std::string config_path = "../config.json";
     Application app(config_path);
 
-    app.Run();
-    return 0;
+    app.Init();
+
+    RunResult result;
+
+    while (result != std::nullopt) {
+        result = app.Run();
+    }
+
+    return EXIT_SUCCESS;
 }
