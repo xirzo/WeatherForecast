@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <iostream>
 #include <optional>
 
 #include "app.h"
@@ -9,9 +10,10 @@ int main(void) {
 
     app.Init();
 
-    RunResult result;
+    RunResult result = app.Run();
 
     while (result != std::nullopt) {
+        std::cerr << result->message << std::endl;
         result = app.Run();
     }
 
