@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "city.h"
+
 struct Configuration {
-    std::vector<std::string> cities;
+    std::vector<City> cities;
     std::string api_key;
     int days;
     int frequency;

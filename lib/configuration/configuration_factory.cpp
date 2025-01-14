@@ -1,9 +1,9 @@
 #include "configuration_factory.h"
 
-#include <iostream>
 #include <string>
 #include <variant>
 
+#include "city.h"
 #include "client.h"
 #include "configuration.h"
 #include "parser.h"
@@ -112,8 +112,6 @@ CreateResult ConfigurationFactory::Create() {
                            std::get<ExtractionError>(cities_extraction).message};
     }
 
-    configuration.cities = std::get<std::vector<std::string>>(cities_extraction);
-
     std::vector<std::string> cities_vec =
         std::get<std::vector<std::string>>(cities_extraction);
 
@@ -142,6 +140,8 @@ CreateResult ConfigurationFactory::Create() {
 
         Converter converter(json);
 
+        City city;
+
         ConvertResult latitude_result = converter.ConvertKey("latitude");
 
         if (std::holds_alternative<ConvertError>(latitude_result)) {
@@ -156,7 +156,7 @@ CreateResult ConfigurationFactory::Create() {
             return CreateError{"Latitude property is not a double"};
         }
 
-        double latitude = std::get<double>(std::get<JsonValue>(latitude_result).value);
+        city.latitude = std::get<double>(std::get<JsonValue>(latitude_result).value);
 
         ConvertResult longitude_result = converter.ConvertKey("longitude");
 
@@ -173,9 +173,8 @@ CreateResult ConfigurationFactory::Create() {
             return CreateError{"Longitude property is not a double"};
         }
 
-        double longitude = std::get<double>(std::get<JsonValue>(longitude_result).value);
-
-        std::cout << latitude << " " << longitude << std::endl;
+        city.longitude = std::get<double>(std::get<JsonValue>(longitude_result).value);
+        configuration.cities.push_back(city);
     }
 
     return configuration;
