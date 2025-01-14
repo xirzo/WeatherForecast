@@ -3,6 +3,7 @@
 #include <variant>
 
 #include "configuration.h"
+#include "request.h"
 
 int main() {
     ConfigurationFactory factory;
@@ -20,7 +21,7 @@ int main() {
     std::cout << configuration.api_key << std::endl;
 
     for (size_t i = 0; i < configuration.cities.size(); ++i) {
-        std::cout << configuration.cities[i] << std::endl;
+        get_lat_lon_by_city_name(configuration.cities[i]);
     }
 
     return 0;
