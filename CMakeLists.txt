@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(
-  cpp_tests
+  weather
   VERSION 0.1
   DESCRIPTION "Xirzo ITMO Labwork"
   LANGUAGES CXX)

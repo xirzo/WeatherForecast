@@ -1,5 +1,5 @@
-#ifndef FILE_READER
-#define FILE_READER
+#ifndef FILE_READER_H
+#define FILE_READER_H
 
 #include <string>
 #include <variant>

@@ -1,4 +1,6 @@
-add_library(configuration STATIC configuration.h configuration.cpp)
+add_library(
+  configuration STATIC configuration.h configuration.cpp
+                       configuration_factory.h configuration_factory.cpp)
 
 target_link_libraries(configuration PRIVATE parser)
 

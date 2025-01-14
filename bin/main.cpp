@@ -2,7 +2,7 @@
 #include <ostream>
 #include <variant>
 
-#include "configuration.h"
+#include "configuration_factory.h"
 #include "request.h"
 
 int main() {
