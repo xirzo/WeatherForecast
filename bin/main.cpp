@@ -4,21 +4,22 @@
 
 #include "app.h"
 
-int main(void) {
-    Application app("../config.json");
+int main() {
+    Application app("../../config.json");
 
     InitResult init_result = app.Init();
 
     if (init_result != std::nullopt) {
         std::cerr << init_result->message << std::endl;
+        return EXIT_FAILURE;
     }
 
-    RunResult result = app.Run();
+    RunResult result;
 
-    while (result != std::nullopt) {
-        std::cerr << result->message << std::endl;
+    do {
         result = app.Run();
-    }
+    } while (result != std::nullopt);
 
-    return EXIT_SUCCESS;
+    std::cerr << result->message << std::endl;
+    return EXIT_FAILURE;
 }
