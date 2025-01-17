@@ -1,6 +1,5 @@
 #include "forecast_factory.h"
 
-#include <iostream>
 #include <string>
 #include <variant>
 
@@ -69,8 +68,6 @@ ForecastCreateResult ForecastFactory::Create() {
         std::vector<WeatherDay> days = std::get<std::vector<WeatherDay>>(forecast_result);
 
         Forecast forecast{configuration_.cities[i].name, days};
-
-        std::cout << forecast.city_name << std::endl;
 
         forecasts.push_back(forecast);
     }

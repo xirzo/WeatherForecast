@@ -32,12 +32,9 @@ public:
     RunResult Run();
 
 private:
-    const Event ExitKey = Event::Escape;
-    const Event NextKey = Event::N;
-    const Event PreviousKey = Event::P;
-
     std::unique_ptr<JsonParser> parser_;
     std::unique_ptr<ConfigurationFactory> config_factory_;
     std::unique_ptr<ForecastFactory> forecast_factory_;
+    std::vector<Forecast> forecasts_;
 };
 #endif  // APPLICATION_H

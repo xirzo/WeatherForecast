@@ -1,12 +1,10 @@
-#include <cstdlib>
 #include <iostream>
 #include <optional>
-#include <variant>
 
 #include "app.h"
 
 int main() {
-    Application app("../../config.json");
+    Application app("./config.json");
 
     InitResult init_result = app.Init();
 
@@ -15,15 +13,12 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    RunResult result;
+    RunResult result = app.Run();
 
-    do {
-        result = app.Run();
-
+    if (result.has_value() == false) {
         std::cerr << result->message << std::endl;
         return EXIT_FAILURE;
-
-    } while (result != std::nullopt);
+    }
 
     return EXIT_SUCCESS;
 }
