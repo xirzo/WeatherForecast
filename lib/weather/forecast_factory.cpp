@@ -4,6 +4,7 @@
 #include <variant>
 
 #include "parser.h"
+#include "weather_day.h"
 #include "weather_parser.h"
 
 ForecastFactory::ForecastFactory(Configuration configuration)
@@ -64,7 +65,11 @@ ForecastCreateResult ForecastFactory::Create() {
                 std::get<WeatherParserError>(forecast_result).message};
         }
 
-        forecasts.push_back(std::get<Forecast>(forecast_result));
+        std::vector<WeatherDay> days = std::get<std::vector<WeatherDay>>(forecast_result);
+
+        Forecast forecast{configuration_.cities[i].name, days};
+
+        forecasts.push_back(forecast);
     }
 
     return forecasts;
