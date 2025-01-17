@@ -2,6 +2,7 @@
 
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
+#include <iostream>
 #include <optional>
 
 #include "configuration_factory.h"
@@ -36,6 +37,58 @@ InitResult Application::Init() {
     }
 
     std::vector<Forecast> forecasts = std::get<std::vector<Forecast>>(forecast_result);
+
+    for (size_t i = 0; i < forecasts.size(); i++) {
+        std::cout << forecasts[i].city_name << std::endl;
+
+        for (size_t j = 0; j < forecasts.size(); j++) {
+            std::cout << forecasts[i].days[j].date << std::endl;
+
+            std::cout << "Morning:" << std::endl;
+            std::cout << "  Humidity: " << forecasts[i].days[j].morning.humidity
+                      << std::endl;
+            std::cout << "  Cloud Cover: " << forecasts[i].days[j].morning.cloud_cover
+                      << std::endl;
+            std::cout << "  Temperature: " << forecasts[i].days[j].morning.temperature
+                      << std::endl;
+            std::cout << "  Wind Speed: " << forecasts[i].days[j].morning.wind_speed
+                      << std::endl;
+            std::cout << "  Rain: " << forecasts[i].days[j].morning.rain << std::endl;
+
+            std::cout << "Afternoon:" << std::endl;
+            std::cout << "  Humidity: " << forecasts[i].days[j].afternoon.humidity
+                      << std::endl;
+            std::cout << "  Cloud Cover: " << forecasts[i].days[j].afternoon.cloud_cover
+                      << std::endl;
+            std::cout << "  Temperature: " << forecasts[i].days[j].afternoon.temperature
+                      << std::endl;
+            std::cout << "  Wind Speed: " << forecasts[i].days[j].afternoon.wind_speed
+                      << std::endl;
+            std::cout << "  Rain: " << forecasts[i].days[j].afternoon.rain << std::endl;
+
+            std::cout << "Evening:" << std::endl;
+            std::cout << "  Humidity: " << forecasts[i].days[j].evening.humidity
+                      << std::endl;
+            std::cout << "  Cloud Cover: " << forecasts[i].days[j].evening.cloud_cover
+                      << std::endl;
+            std::cout << "  Temperature: " << forecasts[i].days[j].evening.temperature
+                      << std::endl;
+            std::cout << "  Wind Speed: " << forecasts[i].days[j].evening.wind_speed
+                      << std::endl;
+            std::cout << "  Rain: " << forecasts[i].days[j].evening.rain << std::endl;
+
+            std::cout << "Night:" << std::endl;
+            std::cout << "  Humidity: " << forecasts[i].days[j].night.humidity
+                      << std::endl;
+            std::cout << "  Cloud Cover: " << forecasts[i].days[j].night.cloud_cover
+                      << std::endl;
+            std::cout << "  Temperature: " << forecasts[i].days[j].night.temperature
+                      << std::endl;
+            std::cout << "  Wind Speed: " << forecasts[i].days[j].night.wind_speed
+                      << std::endl;
+            std::cout << "  Rain: " << forecasts[i].days[j].night.rain << std::endl;
+        }
+    }
 
     return std::nullopt;
 }

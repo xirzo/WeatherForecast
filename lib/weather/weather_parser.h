@@ -19,11 +19,15 @@ using PeriodParseResult = std::variant<WeatherPeriod, WeatherParserError>;
 
 class WeatherParser {
 public:
-    WeatherParseResult Parse(Json json);
+    WeatherParseResult Parse(Json& json);
 
 private:
-    DayParseResult Parse(std::string);
-    PeriodParseResult Parse();
+    DayParseResult ParseDay(JsonObject& hourly, size_t start_index);
+    PeriodParseResult ParsePeriod(const JsonArray& temperatureArray,
+                                  const JsonArray& humidityArray,
+                                  const JsonArray& rainArray,
+                                  const JsonArray& cloudCoverArray,
+                                  const JsonArray& windSpeedArray, size_t index);
 };
 
 #endif  // !WEATHER_PARSER_H
