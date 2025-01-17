@@ -35,7 +35,7 @@ InitResult Application::Init() {
         return InitError{std::get<ForecastCreateError>(forecast_result).message};
     }
 
-    Forecast forecast = std::get<Forecast>(forecast_result);
+    std::vector<Forecast> forecasts = std::get<std::vector<Forecast>>(forecast_result);
 
     return std::nullopt;
 }
@@ -75,5 +75,5 @@ RunResult Application::Run() {
     // });
     //
     // screen.Loop(renderer);
-    return std::nullopt;
+    return RunError("Exit key pressed");
 }

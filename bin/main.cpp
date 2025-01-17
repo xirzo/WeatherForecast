@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <optional>
+#include <variant>
 
 #include "app.h"
 
@@ -18,8 +19,11 @@ int main() {
 
     do {
         result = app.Run();
+
+        std::cerr << result->message << std::endl;
+        return EXIT_FAILURE;
+
     } while (result != std::nullopt);
 
-    std::cerr << result->message << std::endl;
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }

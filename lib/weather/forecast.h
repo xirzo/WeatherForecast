@@ -1,10 +1,14 @@
 #ifndef FORECAST_H
 #define FORECAST_H
 
+#include <string>
 #include <vector>
 
 #include "weather_day.h"
 
-using Forecast = std::vector<WeatherDay>;
+struct Forecast {
+    std::string city_name;
+    std::vector<WeatherDay> days;
+};
 
 #endif  // !FORECAST_H
