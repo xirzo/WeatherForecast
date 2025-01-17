@@ -3,7 +3,6 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <optional>
-#include <stdexcept>
 
 #include "configuration_factory.h"
 #include "forecast_factory.h"
@@ -14,30 +13,29 @@
 
 using namespace ftxui;
 
-Application::Application(std::string& config_path) : file_reader_(config_path) {
-    ReadFileResult read_result = file_reader_.ReadFile();
-
-    if (std::holds_alternative<FileError>(read_result)) {
-        std::string error_message = std::get<FileError>(read_result).message;
-        throw std::invalid_argument(error_message);
-    }
-
-    std::string file_content = std::get<std::string>(read_result);
-
-    parser_ = std::make_unique<JsonParser>(file_content);
-    factory_ = std::make_unique<ConfigurationFactory>(*parser_);
+Application::Application(const std::string& configuration_path) {
+    parser_ = std::make_unique<JsonParser>();
+    config_factory_ = std::make_unique<ConfigurationFactory>(configuration_path);
 }
 
 InitResult Application::Init() {
-    CreateResult result = factory_->Create();
+    CreateResult config_result = config_factory_->Create();
 
-    if (std::holds_alternative<CreateError>(result)) {
-        return InitError{std::get<CreateError>(result).message};
+    if (std::holds_alternative<CreateError>(config_result)) {
+        return InitError{std::get<CreateError>(config_result).message};
     }
 
-    Configuration configuration = std::get<Configuration>(result);
+    Configuration configuration = std::get<Configuration>(config_result);
 
-    ForecastFactory forecast_factory(configuration);
+    forecast_factory_ = std::make_unique<ForecastFactory>(configuration);
+
+    ForecastCreateResult forecast_result = forecast_factory_->Create();
+
+    if (std::holds_alternative<ForecastCreateError>(forecast_result)) {
+        return InitError{std::get<ForecastCreateError>(forecast_result).message};
+    }
+
+    Forecast forecast = std::get<Forecast>(forecast_result);
 
     return std::nullopt;
 }

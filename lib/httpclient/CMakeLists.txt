@@ -1,4 +1,4 @@
-add_library(httpclient STATIC client.h client.cpp)
+add_library(httpclient client.h client.cpp)
 
 target_link_libraries(httpclient PRIVATE cpr::cpr)
 

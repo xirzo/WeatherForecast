@@ -9,8 +9,12 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+list(APPEND CMAKE_PREFIX_PATH "/usr/local/lib/cmake/json_parser")
+set(json_parser_DIR "/usr/local/lib/cmake/json_parser")
+
 find_package(cpr REQUIRED)
 find_package(ftxui 5 REQUIRED)
+find_package(json_parser 1.0 REQUIRED)
 
 if(WIN32)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
@@ -31,5 +35,3 @@ endif()
 
 add_subdirectory(lib)
 add_subdirectory(bin)
-
-# enable_testing() add_subdirectory(tests)

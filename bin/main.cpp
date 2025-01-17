@@ -5,8 +5,7 @@
 #include "app.h"
 
 int main(void) {
-    std::string config_path = "../config.json";
-    Application app(config_path);
+    Application app("../config.json");
 
     InitResult init_result = app.Init();
 

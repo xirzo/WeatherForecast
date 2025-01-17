@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "configuration.h"
-#include "converter.h"
+#include "file_reader.h"
 #include "parser.h"
 
 struct CreateError {
@@ -22,13 +22,12 @@ using ExtractResult = std::variant<std::vector<std::string>, ExtractionError>;
 
 class ConfigurationFactory {
 public:
-    ConfigurationFactory(JsonParser& parser);
+    ConfigurationFactory(const std::string& configuration_path);
     CreateResult Create();
 
 private:
     JsonParser parser_;
-    ExtractResult ExtractStrings(const std::vector<JsonValue>& jsonValues);
-    std::string Trim(const std::string& str);
+    FileReader file_reader_;
 };
 
 #endif  // CONFIGURATION_FACTORY_H

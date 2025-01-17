@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iterator>
 
-FileReader::FileReader(std::string &filepath) : filepath_(std::move(filepath)) {}
+FileReader::FileReader(const std::string &filepath) : filepath_(std::move(filepath)) {}
 
 ReadFileResult FileReader::ReadFile() {
     std::ifstream file(filepath_);

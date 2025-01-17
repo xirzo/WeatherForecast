@@ -12,7 +12,7 @@ using ReadFileResult = std::variant<std::string, FileError>;
 
 class FileReader {
 public:
-    FileReader(std::string &filepath);
+    FileReader(const std::string &filepath);
 
     ReadFileResult ReadFile();
 
