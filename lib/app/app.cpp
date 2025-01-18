@@ -60,7 +60,7 @@ RunResult Application::Run() {
     Component vert = Container::Vertical({tab, slider});
 
     vert |= CatchEvent([&](Event event) {
-        if (event == Event::Escape) {
+        if (event == ExitKey) {
             screen.ExitLoopClosure();
         }
 

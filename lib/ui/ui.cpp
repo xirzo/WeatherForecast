@@ -1,12 +1,10 @@
 #include "ui.h"
 
+#include <ftxui/dom/node.hpp>
+
 ForecastComponent::ForecastComponent(Forecast& forecast, int& selected_day,
                                      std::function<void()> exit_callback)
     : forecast_(forecast), selected_day_(selected_day), exit_callback_(exit_callback) {}
-
-bool ForecastComponent::OnEvent(ftxui::Event event) {
-    return false;
-}
 
 Element ForecastComponent::Render() {
     return CreateForecastUI(forecast_, selected_day_);
@@ -44,16 +42,19 @@ Element CreateForecastUI(const Forecast& forecast, int& selected_day) {
     Element cityTitle =
         hbox({text("📍 ") | bold, text(forecast.city_name) | dim}) | center;
 
-    int day_count = static_cast<int>(forecast.days.size());
-    if (selected_day < 0) selected_day = 0;
-    if (selected_day >= day_count) selected_day = day_count - 1;
+    int32_t day_count = static_cast<int32_t>(forecast.days.size());
 
-    Element selected_day_element = CreateDayUI(forecast.days[selected_day]);
+    std::vector<Element> days;
 
-    Element document =
-        vbox({cityTitle | border, text("UTC: 2025-01-17 20:12:07") | dim | center,
-              separatorLight(), selected_day_element | flex, separator()}) |
-        flex | border;
+    for (size_t i = 0; i < forecast.days.size(); ++i) {
+        days.push_back(CreateDayUI(forecast.days[i]));
+    }
+
+    Element selected_day_elements = vbox(days) | vscroll_indicator | yframe | yflex;
+
+    Element document = vbox({cityTitle | border, separatorLight(),
+                             selected_day_elements | flex, separator()}) |
+                       flex | border;
 
     return document;
 }

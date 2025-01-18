@@ -21,7 +21,6 @@ public:
     ForecastComponent(Forecast& forecast, int& selected_day,
                       std::function<void()> exit_callback);
 
-    bool OnEvent(ftxui::Event event) override;
     Element Render() override;
 
 private:
