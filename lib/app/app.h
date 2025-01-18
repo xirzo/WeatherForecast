@@ -36,5 +36,9 @@ private:
     std::unique_ptr<ConfigurationFactory> config_factory_;
     std::unique_ptr<ForecastFactory> forecast_factory_;
     std::vector<Forecast> forecasts_;
+
+    const Event ExitKey = Event::Escape;
+    const Event NextKey = Event::n;
+    const Event PreviousKey = Event::p;
 };
 #endif  // APPLICATION_H

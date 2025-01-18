@@ -5,22 +5,6 @@ ForecastComponent::ForecastComponent(Forecast& forecast, int& selected_day,
     : forecast_(forecast), selected_day_(selected_day), exit_callback_(exit_callback) {}
 
 bool ForecastComponent::OnEvent(ftxui::Event event) {
-    if (event == ExitKey) {
-        exit_callback_();
-        return true;
-    }
-
-    if (event == NextKey) {
-        if (selected_day_ < static_cast<int>(forecast_.days.size()) - 1) {
-            selected_day_++;
-            return true;
-        }
-    }
-
-    if (event == PreviousKey) {
-        selected_day_--;
-        return true;
-    }
     return false;
 }
 
@@ -66,25 +50,9 @@ Element CreateForecastUI(const Forecast& forecast, int& selected_day) {
 
     Element selected_day_element = CreateDayUI(forecast.days[selected_day]);
 
-    Element navigation_hints = hbox({
-        text("Previous Day (p)") |
-            color(selected_day > 0 ? Color::Green : Color::GrayDark),
-        filler(),
-        text("Next Day (n)") |
-            color(selected_day < day_count - 1 ? Color::Green : Color::GrayDark),
-    });
-
-    Component slider =
-        Container::Horizontal({Slider("", &selected_day, 0, day_count - 1)});
-
-    Element slider_section =
-        vbox({text("Select Day") | center,
-              slider->Render() | size(WIDTH, GREATER_THAN, 50) | border | yframe});
-
     Element document =
         vbox({cityTitle | border, text("UTC: 2025-01-17 20:12:07") | dim | center,
-              separatorLight(), selected_day_element | flex, separator(),
-              navigation_hints | border, separator(), slider_section}) |
+              separatorLight(), selected_day_element | flex, separator()}) |
         flex | border;
 
     return document;

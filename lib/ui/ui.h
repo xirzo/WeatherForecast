@@ -25,10 +25,7 @@ public:
     Element Render() override;
 
 private:
-    const Event ExitKey = Event::Escape;
-    const Event NextKey = Event::n;
     std::function<void()> exit_callback_;
-    const Event PreviousKey = Event::p;
     Forecast& forecast_;
     int& selected_day_;
 };

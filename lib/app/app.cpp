@@ -45,13 +45,42 @@ Element ButtonToElement(Component button) {
 RunResult Application::Run() {
     ScreenInteractive screen = ScreenInteractive::Fullscreen();
 
-    int32_t selected_day = 0;
+    int32_t selector = 0;
 
     std::shared_ptr<ForecastComponent> component =
-        Make<ForecastComponent>(forecasts_[0], selected_day, screen.ExitLoopClosure());
+        Make<ForecastComponent>(forecasts_[0], selector, screen.ExitLoopClosure());
 
-    Component renderer = Renderer(component, [&] { return component->Render(); });
+    std::shared_ptr<ForecastComponent> component1 =
+        Make<ForecastComponent>(forecasts_[1], selector, screen.ExitLoopClosure());
 
-    screen.Loop(renderer);
+    Component slider = Container::Horizontal(
+        {Slider("Select City", &selector, 0, forecasts_.size() - 1)});
+
+    Component tab = Container::Tab({component, component1}, &selector);
+    Component vert = Container::Vertical({tab, slider});
+
+    vert |= CatchEvent([&](Event event) {
+        if (event == Event::Escape) {
+            screen.ExitLoopClosure();
+        }
+
+        if (event == NextKey) {
+            if (selector < static_cast<int32_t>(forecasts_.size()) - 1) {
+                selector++;
+                return true;
+            }
+        }
+
+        if (event == PreviousKey) {
+            if (selector >= 1) {
+                selector--;
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    screen.Loop(vert);
     return RunError("Unreachable exit");
 }

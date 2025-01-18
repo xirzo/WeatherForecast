@@ -8,6 +8,7 @@ project(
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 list(APPEND CMAKE_PREFIX_PATH "/usr/local/lib/cmake/json_parser")
 set(json_parser_DIR "/usr/local/lib/cmake/json_parser")
