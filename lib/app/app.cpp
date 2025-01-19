@@ -61,7 +61,7 @@ RunResult Application::Run() {
 
     vert |= CatchEvent([&](Event event) {
         if (event == ExitKey) {
-            screen.ExitLoopClosure();
+            screen.ExitLoopClosure()();
         }
 
         if (event == NextKey) {
