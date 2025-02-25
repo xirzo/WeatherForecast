@@ -21,7 +21,7 @@ WeatherParseResult WeatherParser::Parse(Json& json) {
         return WeatherParserError("Time json array was not parsed");
     }
 
-    JsonArray time = std::get<JsonArray>(hourly["time"]);
+    JsonArray time = std::get<JsonArray>(hourly.at("time"));
 
     uint64_t number_of_days = time.size() / static_cast<size_t>(24);
 
@@ -41,19 +41,19 @@ WeatherParseResult WeatherParser::Parse(Json& json) {
 }
 
 DayParseResult WeatherParser::ParseDay(JsonObject& hourly, size_t start_index) {
-    if (!std::holds_alternative<JsonArray>(hourly["temperature_2m"])) {
+    if (!std::holds_alternative<JsonArray>(hourly.at("temperature_2m"))) {
         return WeatherParserError("Failed to parse 'temperature_2m' as JsonArray.");
     }
-    if (!std::holds_alternative<JsonArray>(hourly["relative_humidity_2m"])) {
+    if (!std::holds_alternative<JsonArray>(hourly.at("relative_humidity_2m"))) {
         return WeatherParserError("Failed to parse 'relative_humidity_2m' as JsonArray.");
     }
-    if (!std::holds_alternative<JsonArray>(hourly["rain"])) {
+    if (!std::holds_alternative<JsonArray>(hourly.at("rain"))) {
         return WeatherParserError("Failed to parse 'rain' as JsonArray.");
     }
-    if (!std::holds_alternative<JsonArray>(hourly["cloud_cover"])) {
+    if (!std::holds_alternative<JsonArray>(hourly.at("cloud_cover"))) {
         return WeatherParserError("Failed to parse 'cloud_cover' as JsonArray.");
     }
-    if (!std::holds_alternative<JsonArray>(hourly["wind_speed_10m"])) {
+    if (!std::holds_alternative<JsonArray>(hourly.at("wind_speed_10m"))) {
         return WeatherParserError("Failed to parse 'wind_speed_10m' as JsonArray.");
     }
 
